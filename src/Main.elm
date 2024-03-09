@@ -12,9 +12,17 @@ worldSize =
     ( 5, 5 )
 
 
+type alias South =
+    Int
+
+
+type alias West =
+    Int
+
+
 type alias Model =
-    { x : Int
-    , y : Int
+    { x : West
+    , y : South
     , direction : Direction
     }
 
@@ -31,6 +39,27 @@ main =
 
 update : Msg -> Model -> Model
 update msg model =
+    case msg of
+        Place x y direction ->
+            place x y direction model
+
+        Move ->
+            move model
+
+        Left ->
+            turnLeft model
+
+        Right ->
+            turnRight model
+
+
+place : South -> West -> Direction -> Model -> Model
+place x y direction model =
+    { model | x = x, y = y, direction = direction }
+
+
+move : Model -> Model
+move model =
     let
         maxColumn =
             Tuple.first worldSize
@@ -38,67 +67,70 @@ update msg model =
         maxRow =
             Tuple.second worldSize
     in
-    case msg of
-        Place x y direction ->
-            { model | x = x, y = y, direction = direction }
+    case model.direction of
+        South ->
+            if model.y + 1 >= maxRow then
+                model
 
-        Move ->
-            case model.direction of
-                South ->
-                    if model.y + 1 >= maxRow then
-                        model
+            else
+                { model | y = model.y + 1 }
 
-                    else
-                        { model | y = model.y + 1 }
+        North ->
+            if model.y == 0 then
+                model
 
-                North ->
-                    if model.y == 0 then
-                        model
+            else
+                { model | y = model.y - 1 }
 
-                    else
-                        { model | y = model.y - 1 }
+        East ->
+            if model.x == 0 then
+                model
 
-                East ->
-                    if model.x == 0 then
-                        model
+            else
+                { model | x = model.x - 1 }
 
-                    else
-                        { model | x = model.x - 1 }
+        West ->
+            if model.x + 1 >= maxColumn then
+                model
 
-                West ->
-                    if model.x + 1 >= maxColumn then
-                        model
+            else
+                { model | x = model.x + 1 }
 
-                    else
-                        { model | x = model.x + 1 }
 
-        Left ->
-            case model.direction of
-                South ->
-                    { model | direction = West }
+turnLeft : Model -> Model
+turnLeft model =
+    case model.direction of
+        South ->
+            { model | direction = West }
 
-                North ->
-                    { model | direction = East }
+        North ->
+            { model | direction = East }
 
-                East ->
-                    { model | direction = South }
+        East ->
+            { model | direction = South }
 
-                West ->
-                    { model | direction = North }
+        West ->
+            { model | direction = North }
 
-        Right ->
-            case model.direction of
-                South ->
-                    { model | direction = East }
 
-                North ->
-                    { model | direction = West }
+turnRight : Model -> Model
+turnRight model =
+    case model.direction of
+        South ->
+            { model | direction = East }
 
-                East ->
-                    { model | direction = North }
+        North ->
+            { model | direction = West }
 
-                West ->
-                    { model | direction = South }
+        East ->
+            { model | direction = North }
+
+        West ->
+            { model | direction = South }
+
+
+
+-- VIEW
 
 
 match row column model =
