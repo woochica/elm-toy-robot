@@ -122,10 +122,10 @@ turnRight model =
                     East
 
                 East ->
-                    North
+                    South
 
                 West ->
-                    South
+                    North
     in
     { model | direction = newDirection }
 
