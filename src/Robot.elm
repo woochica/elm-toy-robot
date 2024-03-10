@@ -92,34 +92,42 @@ move model =
 
 turnLeft : Model -> Model
 turnLeft model =
-    case model.direction of
-        South ->
-            { model | direction = East }
+    let
+        newDirection =
+            case model.direction of
+                South ->
+                    East
 
-        North ->
-            { model | direction = West }
+                North ->
+                    West
 
-        East ->
-            { model | direction = North }
+                East ->
+                    North
 
-        West ->
-            { model | direction = South }
+                West ->
+                    South
+    in
+    { model | direction = newDirection }
 
 
 turnRight : Model -> Model
 turnRight model =
-    case model.direction of
-        South ->
-            { model | direction = West }
+    let
+        newDirection =
+            case model.direction of
+                South ->
+                    West
 
-        North ->
-            { model | direction = East }
+                North ->
+                    East
 
-        East ->
-            { model | direction = North }
+                East ->
+                    North
 
-        West ->
-            { model | direction = South }
+                West ->
+                    South
+    in
+    { model | direction = newDirection }
 
 
 
@@ -134,21 +142,21 @@ match row column model =
 viewRobot : Direction -> Html Msg
 viewRobot direction =
     let
-        attrs =
+        degrees =
             case direction of
                 North ->
-                    []
+                    0
 
                 South ->
-                    [ style "transform" "rotate(180deg)" ]
+                    180
 
                 East ->
-                    [ style "transform" "rotate(-90deg)" ]
+                    -90
 
                 West ->
-                    [ style "transform" "rotate(90deg)" ]
+                    90
     in
-    div attrs [ text "🤖" ]
+    div [ style "transform" ("rotate(" ++ String.fromInt degrees ++ "deg)") ] [ text "🤖" ]
 
 
 viewEmptyCell : Html Msg
