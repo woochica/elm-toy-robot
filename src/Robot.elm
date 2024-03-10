@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import Msg exposing (Direction(..), Msg(..))
 
 
-worldSize : ( Int, Int )
+worldSize : ( East, North )
 worldSize =
     ( 5, 5 )
 
