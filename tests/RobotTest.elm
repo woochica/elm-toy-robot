@@ -2,7 +2,7 @@ module RobotTest exposing (suite)
 
 import Expect
 import Msg exposing (Direction(..))
-import Robot exposing (move, place, turnLeft, turnRight)
+import Robot exposing (move, place, turnLeft, turnRight, x, y)
 import Test exposing (Test)
 
 
@@ -13,29 +13,29 @@ suite =
             \_ ->
                 place 1 2 East
                     |> Expect.equal
-                        { direction = East, x = 1, y = 2 }
+                        { direction = East, x = x 1, y = y 2 }
         , Test.test "moves robot forward by one" <|
             \_ ->
                 place 0 0 North
                     |> move
                     |> Expect.equal
-                        { direction = North, x = 0, y = 1 }
+                        { direction = North, x = x 0, y = y 1 }
         , Test.test "robot cannot fall off the table" <|
             \_ ->
                 place 0 0 South
                     |> move
                     |> Expect.equal
-                        { direction = South, x = 0, y = 0 }
+                        { direction = South, x = x 0, y = y 0 }
         , Test.test "turns robot to left" <|
             \_ ->
                 place 0 0 North
                     |> turnLeft
                     |> Expect.equal
-                        { direction = West, x = 0, y = 0 }
+                        { direction = West, x = x 0, y = y 0 }
         , Test.test "turns robot to right" <|
             \_ ->
                 place 0 0 North
                     |> turnRight
                     |> Expect.equal
-                        { direction = East, x = 0, y = 0 }
+                        { direction = East, x = x 0, y = y 0 }
         ]

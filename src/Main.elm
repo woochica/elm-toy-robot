@@ -3,7 +3,7 @@ module Main exposing (init, main)
 import Browser
 import Html exposing (Html)
 import Msg exposing (Direction(..), Msg(..))
-import Robot exposing (Model, move, place, turnLeft, turnRight)
+import Robot exposing (Model, move, place, turnLeft, turnRight, x, y)
 
 
 type alias Model =
@@ -12,7 +12,7 @@ type alias Model =
 
 init : Model
 init =
-    { x = 0, y = 0, direction = South }
+    { x = x 0, y = y 0, direction = South }
 
 
 main : Program () Model Msg

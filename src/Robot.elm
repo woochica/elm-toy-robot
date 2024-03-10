@@ -1,4 +1,4 @@
-module Robot exposing (Model, move, place, turnLeft, turnRight, view)
+module Robot exposing (Model, move, place, turnLeft, turnRight, view, x, y)
 
 import Html exposing (Html, button, div, table, td, text, tr)
 import Html.Attributes exposing (style)
@@ -8,15 +8,15 @@ import Msg exposing (Direction(..), Msg(..))
 
 worldSize : ( East, North )
 worldSize =
-    ( 5, 5 )
+    ( x 5, y 5 )
 
 
-type alias North =
-    Int
+type North
+    = Y Int
 
 
-type alias East =
-    Int
+type East
+    = X Int
 
 
 type alias Model =
@@ -26,48 +26,68 @@ type alias Model =
     }
 
 
-place : North -> East -> Direction -> Model
-place x y direction =
-    { x = x, y = y, direction = direction }
+unwrapNorth : North -> Int
+unwrapNorth (Y int) =
+    int
+
+
+unwrapEast : East -> Int
+unwrapEast (X int) =
+    int
+
+
+x : Int -> East
+x x_ =
+    X x_
+
+
+y : Int -> North
+y y_ =
+    Y y_
+
+
+place : Int -> Int -> Direction -> Model
+place x_ y_ direction =
+    { x = x x_, y = y y_, direction = direction }
 
 
 move : Model -> Model
 move model =
     let
         maxColumn =
-            Tuple.first worldSize
+            Tuple.first worldSize |> unwrapEast
 
         maxRow =
-            Tuple.second worldSize
+            Tuple.second worldSize |> unwrapNorth
     in
     case model.direction of
         North ->
-            if model.y + 1 >= maxRow then
+            if unwrapNorth model.y + 1 >= maxRow then
                 model
 
             else
-                { model | y = model.y + 1 }
+                { model | y = unwrapNorth model.y + 1 |> y }
 
         South ->
-            if model.y == 0 then
+            if unwrapNorth model.y == 0 then
                 model
 
             else
-                { model | y = model.y - 1 }
+                { model | y = (unwrapNorth model.y - 1) |> y }
 
         West ->
-            if model.x == 0 then
+            if unwrapEast model.x == 0 then
                 model
 
             else
-                { model | x = model.x - 1 }
+                { model | x = (unwrapEast model.x - 1) |> x }
 
         East ->
-            if model.x + 1 >= maxColumn then
+            if unwrapEast model.x + 1 >= maxColumn then
                 model
 
             else
-                { model | x = model.x + 1 }
+                { model | x = (unwrapEast model.x + 1) |> x }
 
 
 turnLeft : Model -> Model
@@ -106,8 +126,9 @@ turnRight model =
 -- VIEW
 
 
+match : Int -> Int -> Model -> Bool
 match row column model =
-    model.y == row - 1 && model.x == column - 1
+    unwrapNorth model.y == row - 1 && unwrapEast model.x == column - 1
 
 
 viewRobot : Direction -> Html Msg
@@ -147,10 +168,10 @@ viewGame : Model -> Html Msg
 viewGame model =
     let
         maxColumn =
-            Tuple.first worldSize
+            Tuple.first worldSize |> unwrapEast
 
         maxRow =
-            Tuple.second worldSize
+            Tuple.second worldSize |> unwrapNorth
 
         viewCellContent row column =
             if match row column model then
