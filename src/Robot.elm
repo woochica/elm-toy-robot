@@ -136,7 +136,7 @@ turnRight model =
 
 match : Int -> Int -> Model -> Bool
 match row column model =
-    unwrapNorth model.y == row - 1 && unwrapEast model.x == column - 1
+    unwrapNorth model.y == abs (row - 5) && unwrapEast model.x == column - 1
 
 
 viewRobot : Direction -> Html Msg
@@ -151,10 +151,10 @@ viewRobot direction =
                     180
 
                 East ->
-                    -90
+                    90
 
                 West ->
-                    90
+                    -90
     in
     div [ style "transform" ("rotate(" ++ String.fromInt degrees ++ "deg)") ] [ text "🤖" ]
 
