@@ -1,11 +1,6 @@
-module Msg exposing (Direction(..), Msg(..))
+module Msg exposing (Msg(..))
 
-
-type Direction
-    = North
-    | South
-    | East
-    | West
+import Robot exposing (Direction)
 
 
 type Msg

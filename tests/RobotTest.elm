@@ -1,8 +1,7 @@
 module RobotTest exposing (suite)
 
 import Expect
-import Msg exposing (Direction(..))
-import Robot exposing (move, place, turnLeft, turnRight, x, y)
+import Robot exposing (Direction(..), move, place, turnLeft, turnRight, x, y)
 import Test exposing (Test)
 
 

@@ -1,9 +1,7 @@
-module Robot exposing (Model, move, place, turnLeft, turnRight, view, x, y)
+module Robot exposing (Direction(..), Model, move, place, turnLeft, turnRight, view, x, y)
 
-import Html exposing (Html, button, div, table, td, text, tr)
+import Html exposing (Html, div, table, td, text, tr)
 import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
-import Msg exposing (Direction(..), Msg(..))
 
 
 worldSize : ( East, North )
@@ -17,6 +15,13 @@ type North
 
 type East
     = X Int
+
+
+type Direction
+    = North
+    | South
+    | East
+    | West
 
 
 type alias Model =
@@ -139,7 +144,7 @@ match row column model =
     unwrapNorth model.y == abs (row - 5) && unwrapEast model.x == column - 1
 
 
-viewRobot : Direction -> Html Msg
+viewRobot : Direction -> Html msg
 viewRobot direction =
     let
         degrees =
@@ -159,21 +164,13 @@ viewRobot direction =
     div [ style "transform" ("rotate(" ++ String.fromInt degrees ++ "deg)") ] [ text "🤖" ]
 
 
-viewEmptyCell : Html Msg
+viewEmptyCell : Html msg
 viewEmptyCell =
     text "\u{2001}"
 
 
-view : Model -> Html Msg
+view : Model -> Html msg
 view model =
-    div []
-        [ viewNav
-        , viewGame model
-        ]
-
-
-viewGame : Model -> Html Msg
-viewGame model =
     let
         maxColumn =
             Tuple.first worldSize |> unwrapEast
@@ -201,14 +198,4 @@ viewGame model =
     div []
         [ table [ style "font-size" "2em", style "border-collapse" "collapse" ]
             (List.range 1 maxRow |> List.map viewRow)
-        ]
-
-
-viewNav : Html Msg
-viewNav =
-    div []
-        [ button [ onClick <| Place 0 0 North ] [ text "init" ]
-        , button [ onClick <| Move ] [ text "move" ]
-        , button [ onClick <| Left ] [ text "left" ]
-        , button [ onClick <| Right ] [ text "right" ]
         ]
