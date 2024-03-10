@@ -11,22 +11,22 @@ worldSize =
     ( 5, 5 )
 
 
-type alias South =
+type alias North =
     Int
 
 
-type alias West =
+type alias East =
     Int
 
 
 type alias Model =
-    { x : West
-    , y : South
+    { x : East
+    , y : North
     , direction : Direction
     }
 
 
-place : South -> West -> Direction -> Model
+place : North -> East -> Direction -> Model
 place x y direction =
     { x = x, y = y, direction = direction }
 
@@ -41,28 +41,28 @@ move model =
             Tuple.second worldSize
     in
     case model.direction of
-        South ->
+        North ->
             if model.y + 1 >= maxRow then
                 model
 
             else
                 { model | y = model.y + 1 }
 
-        North ->
+        South ->
             if model.y == 0 then
                 model
 
             else
                 { model | y = model.y - 1 }
 
-        East ->
+        West ->
             if model.x == 0 then
                 model
 
             else
                 { model | x = model.x - 1 }
 
-        West ->
+        East ->
             if model.x + 1 >= maxColumn then
                 model
 
@@ -74,26 +74,26 @@ turnLeft : Model -> Model
 turnLeft model =
     case model.direction of
         South ->
-            { model | direction = West }
-
-        North ->
             { model | direction = East }
 
+        North ->
+            { model | direction = West }
+
         East ->
-            { model | direction = South }
+            { model | direction = North }
 
         West ->
-            { model | direction = North }
+            { model | direction = South }
 
 
 turnRight : Model -> Model
 turnRight model =
     case model.direction of
         South ->
-            { model | direction = East }
+            { model | direction = West }
 
         North ->
-            { model | direction = West }
+            { model | direction = East }
 
         East ->
             { model | direction = North }
@@ -178,7 +178,7 @@ viewGame model =
 viewNav : Html Msg
 viewNav =
     div []
-        [ button [ onClick <| Place 0 0 South ] [ text "init" ]
+        [ button [ onClick <| Place 0 0 North ] [ text "init" ]
         , button [ onClick <| Move ] [ text "move" ]
         , button [ onClick <| Left ] [ text "left" ]
         , button [ onClick <| Right ] [ text "right" ]
